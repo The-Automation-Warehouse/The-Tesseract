@@ -1,0 +1,345 @@
+esphome:
+  name: omnitouch
+  friendly_name: Omnitouch
+  on_boot:
+   - priority: -100
+     then:
+        - wait_until: api.connected
+        - display.page.show: online
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+    version: recommended
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "J+GLZK29VkNFNxbZ6ZVISQi1h5roTE6QiivY759v/kg="
+
+ota:
+  password: "3f8eb8b8d56f2890efdc0c01c2249eb2"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+
+
+
+i2s_audio:
+  i2s_lrclk_pin: GPIO27
+  i2s_bclk_pin: GPIO26
+
+microphone:
+  - platform: i2s_audio
+    id: mic
+    adc_type: external
+    i2s_din_pin: GPIO13
+    pdm: false
+
+speaker:
+  - platform: i2s_audio
+    id: big_speaker
+    dac_type: external
+    i2s_dout_pin: GPIO25
+    mode: mono
+
+voice_assistant:
+  microphone: mic
+  use_wake_word: false
+  noise_suppression_level: 2
+  auto_gain: 31dBFS
+  volume_multiplier: 3.0
+  speaker: big_speaker
+  id: assist
+  on_start:
+    - display.page.show: listening
+  on_end:
+    - display.page.show: online
+
+    
+  
+
+
+
+light:
+  - platform: esp32_rmt_led_strip
+    rgb_order: RGB
+    pin: GPIO33
+    num_leds: 1
+    rmt_channel: 0
+    chipset: ws2812
+    name: "Omnitouch Neopixel"
+    id: omnitouch_neopixel
+    effects:
+      - addressable_rainbow:
+      - addressable_rainbow:
+          name: Rainbow Effect With Custom Values
+          speed: 40
+          width: 1
+
+i2c:
+  sda: 21
+  scl: 22
+  scan: True
+  id: bus_a
+  frequency: 800kHz
+
+
+font:
+  - file: "fonts/Comic Sans MS.ttf"
+    id: comic_sans
+    size: 14
+
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x32"
+    address: 0x3C
+    id: omnitouch_display
+    update_interval: 0.2s
+    pages:
+      - id: online
+        lambda: |-
+          it.print(0, 10, id(comic_sans), "Omnitouch online!");
+      - id: listening
+        lambda: |-
+          it.print(0, 10, id(comic_sans), "Listening...");
+                
+
+
+
+
+#  remote_receiver:
+#    pin: GPIO34
+#    dump: all
+#  
+#  remote_transmitter:
+#    pin: GPIO32
+#    carrier_duty_percent: 50%
+
+
+sensor:
+
+
+  - platform: esp32_hall
+    name: "- Hall Effect"
+    id: omnitouch_hall_effect
+    update_interval: 0.2s
+
+
+  - platform: mpu6050
+    address: 0x68
+    id: mpu6050_sensor
+    accel_x:
+      name: "- Accel X"
+    accel_y:
+      name: "- Accel Y"
+    accel_z:
+      name: "- Accel z"
+    gyro_x:
+      name: "- Gyro X"
+    gyro_y:
+      name: "- Gyro Y"
+    gyro_z:
+      name: "- Gyro z"
+    temperature:
+      name: "- Temperature"
+    update_interval: 0.2s
+
+
+
+
+
+  - platform: hmc5883l
+    address: 0x1E
+    field_strength_x:
+      name: "- Field X"
+      id: field_x
+    field_strength_y:
+      name: "- Field Y"
+      id: field_y
+    field_strength_z:
+      name: "- Field Z"
+      id: field_z
+    heading:
+      name: "- Compass"
+    oversampling: 4x
+    range: 130uT
+    update_interval: 0.2s
+
+
+  - platform: template
+    name: "- Heading"
+    id: heading_sensor
+    icon: "mdi:compass"
+    lambda: |- 
+      float x = id(field_x).state;
+      float y = id(field_y).state;
+        float r = y / x;
+      float angle;
+      if (x > 0) {
+        angle = atan(r);
+      } else if (y >= 0) {
+        angle = atan(r) + 3.14159265359;
+      } else {
+        angle = atan(r) - 3.14159265359;
+      }
+      angle += 0.0872;
+      if(angle < 0) angle += 2*3.14159265359;
+      if(angle > 2*3.14159265359) angle -= 2*3.14159265359;
+      float angle_deg = angle * 180/3.14159265359 ;
+      return angle_deg;
+    update_interval: 0.2s
+    accuracy_decimals: 0
+
+
+#
+#
+#
+#  - platform: bmp3xx
+#    temperature:
+#      name: "Outside Temperature"
+#      oversampling: 16x
+#    pressure:
+#      name: "Outside Pressure"
+#    address: 0x77
+#    update_interval: 10s
+#
+
+  - platform: template
+    name: "- Mode"
+    id: mode_sensor
+    icon: "mdi:cog"
+    lambda: |-
+      int value = 0;
+      if (id(omnitouch_switch1).state) value += 1;
+      if (id(omnitouch_switch2).state) value += 2;
+      if (id(omnitouch_switch3).state) value += 4;
+      if (id(omnitouch_switch4).state) value += 8;
+      return value;
+    update_interval: 0.2s
+    accuracy_decimals: 0
+    on_value:
+      then:
+        - lambda: |- 
+            auto call = id(omnitouch_neopixel).turn_on();
+            call.set_transition_length(100);
+            if (x == 0) {
+              call.set_effect("none");
+              call.set_rgb(0.0, 1.0, 0.0);
+            } else if (x == 1) {
+              call.set_effect("none");
+              call.set_rgb(0.3, 1.0, 0.0);
+            } else if (x == 2) {
+              call.set_effect("none");
+              call.set_rgb(0.6, 1.0, 0.0);
+            } else if (x == 3) {
+              call.set_effect("none");
+              call.set_rgb(1.0, 1.0, 0.0);
+            } else if (x == 4) {
+              call.set_effect("none");
+              call.set_rgb(1.0, 0.6, 0.0);
+            } else if (x == 5) {
+              call.set_effect("none");
+              call.set_rgb(1.0, 0.3, 0.0);
+            } else if (x == 6) {
+              call.set_effect("none");
+              call.set_rgb(1.0, 0.0, 0.0);
+            } else if (x == 15) {
+              call.set_effect("Rainbow Effect With Custom Values");
+            } else {
+              call.set_effect("none");
+              call.set_rgb(0.0, 0.0, 1.0);
+            }
+            call.perform();
+
+
+  - platform: adc
+    pin: GPIO35
+    update_interval: 0.1s
+    id: heartbeat_analog
+    internal: True
+    raw: True
+    accuracy_decimals: 0
+
+
+
+
+
+
+
+binary_sensor:
+  - platform: gpio
+    pin: 
+      number: GPIO15
+      mode:
+        input: True
+        pullup: True
+      inverted: True
+    name: "- Button"
+    filters:
+      - delayed_off: 10ms
+    on_double_click:
+      - if:
+          condition: voice_assistant.is_running
+          then:
+            - voice_assistant.stop:
+          else:
+            - voice_assistant.start:
+            
+
+
+  - platform: analog_threshold
+    name: "- Heartbeat"
+    id: omnitouch_heartbeat
+    sensor_id: heartbeat_analog
+    threshold: 0.3
+
+
+
+
+  - platform: gpio
+    id: omnitouch_switch1
+    pin:
+      number: GPIO16
+      mode:
+        input: True
+        pullup: True
+      inverted: True
+    internal: True
+    
+  - platform: gpio
+    id: omnitouch_switch2
+    pin:
+      number: GPIO17
+      mode:
+        input: True
+        pullup: True
+      inverted: True
+    internal: True
+
+  - platform: gpio
+    id: omnitouch_switch3
+    pin:
+      number: GPIO18
+      mode:
+        input: True
+        pullup: True
+      inverted: True
+    internal: True
+
+  - platform: gpio
+    id: omnitouch_switch4
+    pin:
+      number: GPIO19
+      mode:
+        input: True
+        pullup: True
+      inverted: True
+    internal: True
