@@ -345,6 +345,7 @@ void startEffect(int effectType, int effect)
             hue += 15;
         } else if (effect == 4)
         {
+            FastLED.setBrightness(160);
             lines(pixels);
         } else if (effect == 5)
         {
@@ -357,6 +358,7 @@ void startEffect(int effectType, int effect)
             planets(pixels, 12);
         } else if (effect == 8)
         {
+            FastLED.setBrightness(120);
             vortex(pixels, 6);
         } else if (effect == 9)
         {

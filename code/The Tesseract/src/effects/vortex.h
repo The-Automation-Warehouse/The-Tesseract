@@ -22,8 +22,6 @@ static float vortexHue = 0;
 void vortex(CRGB pixels[NUM_LEDS], uint8_t delayTime)
 {
 
-    FastLED.setBrightness(120);
-
     for (int i = 0; i < 360; i++)
     {
         readOmnitouchData();

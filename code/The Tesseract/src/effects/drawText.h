@@ -620,7 +620,6 @@ void drawText(CRGB pixels[NUM_LEDS], String text, uint8_t initialHue, uint8_t de
         fadeToBlackBy(pixels, NUM_LEDS, 100);
         FastLED.show();
     }
-    FastLED.setBrightness(brightness);
 
 
 }

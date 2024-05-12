@@ -26,7 +26,6 @@ void simpleRainbow(CRGB pixels[NUM_LEDS], uint8_t deltaHue, uint8_t density)
         return;
     }
 
-    FastLED.setBrightness(120);
 
     fill_solid(pixels, NUM_LEDS/NUM_LAYERS, CHSV(hue, 255, 255));
     fill_solid(pixels + NUM_LEDS/NUM_LAYERS, NUM_LEDS/NUM_LAYERS, CHSV(hue + density, 255, 255));

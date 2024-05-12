@@ -102,8 +102,8 @@ void spectrumAnalyser(CRGB pixels[NUM_LEDS], int inputPin)
       if (i>1   && i<=4  ) bandValues[1]  += (int)vReal[i];
       if (i>4   && i<=6  ) bandValues[2]  += (int)vReal[i];
       if (i>6   && i<=10 ) bandValues[3]  += (int)vReal[i];
-      if (i>10   && i<=28  ) bandValues[4]  += (int)vReal[i];
-      if (i>28           ) bandValues[5]  += (int)vReal[i];
+      if (i>10   && i<=25  ) bandValues[4]  += (int)vReal[i];
+      if (i>25           ) bandValues[5]  += (int)vReal[i];
 
     }
   }

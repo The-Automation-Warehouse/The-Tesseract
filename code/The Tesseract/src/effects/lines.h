@@ -35,7 +35,6 @@ void lines(CRGB pixels[NUM_LEDS])
 
     } lines[10];
 
-    FastLED.setBrightness(160);
 
     // Fade the cube to black
     fadeToBlackBy(pixels, NUM_LEDS, 20);
