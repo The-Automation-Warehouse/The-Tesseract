@@ -147,7 +147,7 @@ void setup(void) {
   if (!SD.begin(SPI_QUARTER_SPEED, SD_CS)) {
     tft.setTextColor(TFT_RED, TFT_BLACK);
     tft.drawString("Error", textWidth + tft.width() / 2, 200);
-    while (true) {}
+    //while (true) {}
     
   } else {
     tft.drawString("Ok", textWidth/2 + tft.width() / 2, 200);
