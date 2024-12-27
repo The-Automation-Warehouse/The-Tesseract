@@ -14,20 +14,13 @@
 #include "drawText.h"
 #include "fillCube.h"
 #include "lines.h"
-#include "magnet.h"
 #include "planets.h"
 #include "simpleRainbow.h"
 #include "sparkles.h"
 #include "spectrumAnalyser.h"
-#include "temperature.h"
 #include "tesseract.h"
 #include "tetris.h"
 #include "vortex.h"
-
-
-// Planned effects:
-// - Data Matrix
-// - Fireworks
 
 
 #endif // EFFECTS_H

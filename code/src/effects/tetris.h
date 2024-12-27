@@ -71,11 +71,6 @@ void playTetris(CRGB pixels[NUM_LEDS], TFT_eSPI tft, uint8_t speed, uint8_t fade
 
     while (!gameOver) {
 
-        readOmnitouchData();
-        if (omnitouchData.button == 1) {
-            return;
-        }
-
 
         handleUsb();
         handleInput(pixels);

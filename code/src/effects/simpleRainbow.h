@@ -20,12 +20,6 @@ uint8_t hue;
 
 void simpleRainbow(CRGB pixels[NUM_LEDS], uint8_t deltaHue, uint8_t density)
 {
-    readOmnitouchData();
-    if (omnitouchData.button == 1)
-    {
-        return;
-    }
-
 
     fill_solid(pixels, NUM_LEDS/NUM_LAYERS, CHSV(hue, 255, 255));
     fill_solid(pixels + NUM_LEDS/NUM_LAYERS, NUM_LEDS/NUM_LAYERS, CHSV(hue + density, 255, 255));

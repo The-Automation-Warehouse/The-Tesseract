@@ -58,12 +58,6 @@ void setupFFT()
 void spectrumAnalyser(CRGB pixels[NUM_LEDS], int inputPin)
 {
 
-  readOmnitouchData();
-  if (omnitouchData.button == 1)
-  {
-      return;
-  }
-
 
   // Clear the cube
   fillCube(pixels, CHSV(0, 0, 0));

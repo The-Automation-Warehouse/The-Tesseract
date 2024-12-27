@@ -16,12 +16,10 @@
 
 #include "tesseractFunctions.h"
 #include "joystick.h"
-#include "omnitouch.h"
 #include "CTeensy4Controller.h"
 #include "menu.h"
 
 #include "effects/effects.h"
-#include "effects/white.h"
 
 #include "presentation.h"
 
@@ -85,8 +83,6 @@ time_t getTeensy3Time() {
 
 //define all objects and variables for the USB Host
 JoystickData joystickData[4];
-
-OmnitouchData omnitouchData;
 
 
 
@@ -515,54 +511,6 @@ playSoundEffect:
       }
     }
 
-  } else if (effectType == 4) // Omnitouch
-  {
-    tft.fillScreen(TFT_BLACK);
-    tft.setCursor(0, 0);
-    tft.setTextColor(TFT_WHITE);
-    tft.setTextSize(2);
-    int rectX = 40;
-    int rectY = 40;
-    int rectWidth = 80;
-    int rectHeight = 80;
-
-    tft.fillRect(rectX, rectY, rectWidth, rectHeight, TFT_RED);
-    tft.fillRect(rectX + (rectWidth - rectWidth * 0.4) / 2, rectY + (rectHeight - rectHeight * 0.4) / 2, rectWidth * 0.4, rectHeight * 0.4, TFT_WHITE);
-
-    delay(200);
-
-  playOmnitouch:
-
-    touchX = 0;
-    touchY = 0;
-
-    while (touchX == 0 || touchY == 0)
-    {
-      checkTouch(tft);
-
-      if (effect == 1)
-      {
-          //rotation(pixels);
-
-      } else if (effect == 2)
-      {
-          magnet(pixels);
-      } else if (effect == 3)
-      {
-          temperature(pixels);
-      } else if (effect == 4)
-      {
-          //mode(pixels);
-      }
-      if (touchX > rectX && touchX < rectX + rectWidth && touchY > rectY && touchY < rectY + rectHeight)
-      { 
-        break;
-      }
-      else
-      { 
-        goto playOmnitouch;
-      }
-    }
   }
     
     //clear the cube

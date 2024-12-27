@@ -24,7 +24,6 @@ void vortex(CRGB pixels[NUM_LEDS], uint8_t delayTime)
 
     for (int i = 0; i < 360; i++)
     {
-        readOmnitouchData();
         
         fadeToBlackBy(pixels, NUM_LEDS, 5);
 

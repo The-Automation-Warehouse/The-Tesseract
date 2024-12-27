@@ -22,11 +22,6 @@ static int pos = 0;
 
 void tesseract(CRGB pixels[NUM_LEDS], uint16_t speed)
 {
-    readOmnitouchData();
-    if (omnitouchData.button == 1)
-    {
-        return;
-    }
 
     EVERY_N_MILLISECONDS(speed) {
         //clear all layers

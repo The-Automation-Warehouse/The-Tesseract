@@ -591,13 +591,6 @@ void drawText(CRGB pixels[NUM_LEDS], String text, uint8_t initialHue, uint8_t de
             }
 
             fadeToBlackBy(pixels, NUM_LEDS, 100);
-
-            readOmnitouchData();
-            if (omnitouchData.button == 1)
-            {
-                return;
-            }
-
             
             FastLED.show();
             delay(delayTime);

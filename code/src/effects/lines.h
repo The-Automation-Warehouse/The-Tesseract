@@ -42,11 +42,6 @@ void lines(CRGB pixels[NUM_LEDS])
 
     for (int i = 0; i < 10; i++)
     {
-        readOmnitouchData();
-        if (omnitouchData.button == 1)
-        {
-            return;
-        }
         
         if (!lines[i].initialized)
         {

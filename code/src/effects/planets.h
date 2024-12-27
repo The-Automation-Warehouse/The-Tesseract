@@ -32,12 +32,6 @@ void planets(CRGB pixels[NUM_LEDS], uint16_t delayTime)
 
     for (int i = 0; i < 360; i++)
     {
-
-      readOmnitouchData();
-      if (omnitouchData.button == 1)
-      {
-        return;
-      }
         
       fadeToBlackBy(pixels, NUM_LEDS, 12);
       sun(pixels, CRGB(255, 255, 0));

@@ -20,15 +20,12 @@
 #include <FastLED.h>
 #include "tesseractFunctions.h"
 #include "Entropy.h"
-#include "omnitouch.h"
 #include "menu.h"
 
 #include "effects/effects.h"
-#include "effects/white.h"
 
 #define NUM_LEDS 1000
 #define NUM_LAYERS 10
-extern OmnitouchData omnitouchData;
 extern TFT_eSPI tft;
 extern int touchX, touchY;
 uint32_t lastMillis = 0;
@@ -36,7 +33,6 @@ int effectIndex = 0;
 uint8_t fillHue = 0;
 
 void presentation(CRGB pixels[NUM_LEDS], TFT_eSPI tft);
-void waitForOmniTouch();
 
 void presentation(CRGB pixels[NUM_LEDS], TFT_eSPI tft)
 {
@@ -136,14 +132,6 @@ void presentation(CRGB pixels[NUM_LEDS], TFT_eSPI tft)
     
 
 
-}
-
-
-void waitForOmniTouch()
-{
-    while (omnitouchData.button != 0) {
-        readOmnitouchData();
-    }
 }
 
 #endif // PRESENTATION_H

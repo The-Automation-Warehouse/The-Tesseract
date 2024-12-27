@@ -28,10 +28,9 @@ double timeStart;
 double timeEnd;
 
 //define a array for the names of the effects
-const char *normalEffects[11] = {"Rainbow", "Cube Fill", "Flying Text", "Lines", "Sparkles", "Sparkles - RGB", "Planets", "Vortex", "Tesseract", "Clock", "Coming soon"};
+const char *normalEffects[10] = {"Rainbow", "Cube Fill", "Flying Text", "Lines", "Sparkles", "Sparkles - RGB", "Planets", "Vortex", "Tesseract", "Clock"};
 const char *soundReactiveEffects[4] = {"VU Meter", "Coming soon", "Coming soon", "Coming soon"};
 const char *games[4] = {"Tetris", "Coming soon", "Coming soon", "Coming soon"};
-const char *omnitouchEffects[4] = {"Rotation", "Magnet", "Temperature", "Mode"};
 int touchX, touchY;
 
 void drawMenu(TFT_eSPI tft, int menuIndex);
@@ -77,7 +76,6 @@ int mainMenu(TFT_eSPI tft)
 
     int button2X = buttonX + buttonWidth + 30;
     int button3X = button2X + buttonWidth + 30;
-    int button4X = button3X + buttonWidth + 30;
 
     int debuxX = 400;
     int debugY = 240;
@@ -98,9 +96,6 @@ int mainMenu(TFT_eSPI tft)
 
     tft.fillRect(button3X, buttonY, buttonWidth, buttonHeight, TFT_YELLOW);
     tft.pushImage(button3X + 10, buttonY + 10, 60, 60, gamepad_icon);
-
-    tft.fillRect(button4X, buttonY, buttonWidth, buttonHeight, TFT_BLUE);
-    tft.pushImage(button4X + 10, buttonY + 10, 60, 60, omnitouch_icon);
 
     tft.fillRect(debuxX, debugY, debugWidth, debugHeight, TFT_LIGHTGREY);
     tft.pushImage(debuxX + 5, debugY + 5, 50, 50, debug_icon);
@@ -139,12 +134,6 @@ waitForTouch:
         touchY = 0;
         return 3;
     }
-    else if (touchX > button4X && touchX < button4X + buttonWidth && touchY > buttonY && touchY < buttonY + buttonHeight)
-    {
-        touchX = 0;
-        touchY = 0;
-        return 4;
-    }
     else if (touchX > debuxX && touchX < debuxX + debugWidth && touchY > debugY && touchY < debugY + debugHeight)
     {
         touchX = 0;
@@ -181,10 +170,6 @@ int effectsMenu(TFT_eSPI tft, int effectType)
     else if (effectType == 3)
     {
         effects = games;
-    }
-    else if (effectType == 4)
-    {
-        effects = omnitouchEffects;
     }
     else
     {
