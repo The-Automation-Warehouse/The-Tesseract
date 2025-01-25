@@ -2,8 +2,13 @@
 
 <img src="images/Purple.jpg" alt="Finished Project" width="300"/>
 
+
 ## Introduction
 This project is my DIY take on the popular RGB LED cube. I have always been fascinated by the mesmerizing patterns and animations that can be created with these cubes, so I used my school seminary work as an oporunity to build one myself and decided to turn in into a fully open-source project and guide for anyone who wants to build their own.
+
+<img src="images/Planets.jpg" alt="Animations" width="300"/>
+<img src="images/Tesseract.jpg" alt="Animations" width="300"/>
+<img src="images/Stars.jpg" alt="Animations" width="300"/>
 
 ## My Design
 I decided to build a 10^3 cube, which means it has 1000 LEDs. I was thinking about making it bigger (12^3), but I wanted to keep the cost reasonable. In hindsight, if I had known how much time and effort it would take to build this cube, I would have gone for a much smaller one. But I am happy with the result, and I learned a lot in the process.<br>
@@ -32,7 +37,7 @@ In the end the total cost was around 750 USD (720€), which is a lot, but I spe
 
 
 ### Step 1: The LED structure :bulb:
-The cube is split into walls and layers. Each wall has 100 LEDs, in 10 columns with alternating directions. Every wall is flipped 180º from the previous one. This results in a zig-zag pattern when viewed from the top. Every layer has its own data connection, to the MCU (more on that later). The walls are inserted into base plates and soldered together.
+The cube is split into walls and layers. Each wall has 100 LEDs, in 10 columns. Every wall is flipped 180º from the previous one. This results in a zig-zag pattern when viewed from the top. Every layer has its own data connection, to the MCU (more on that later). The walls are inserted into base plates and soldered together.
 
 *Photo from the top here*
 *Photo from the side here*
@@ -112,6 +117,7 @@ The data connections are made with thin ribbon cable, which is soldered to the 1
 ### Step 7: Making the base frame
 
 The frame is composed of 4 printed corners joined by 4 butterfly clips, 2 T aluminum profiles that hold the LED base plates and 5mm 350x350mm HDF board that everything is mounted on.
+
 <img src="images/Frame_corner.jpg" alt="Corner" height="300"/> <img src="images/Frame.jpg" alt="Frame" height="300"/>
 
 Each corner has features and holes to mount specific peripherals (ex. the touch screen, the power inlet etc.).<br>
@@ -133,11 +139,12 @@ I started by making a prototype on a breadboard and milling the next one on my C
 The board has DC jacks and fuses for 5V and 12V input (both required), a battery clip for the RTC, a port with DIP switches for a MAX9814 microphone breakout board, two MOSFET driven fan ports, breakout pins for the SPI touch screen with integrated SD card reader, and breakout pins for a reset button mounted in the front. There are also UART pins and analog MIC inputs, but I didn't use them in the final version.<br>
 There are also dupont pins for the data connections to each layer of the cube.<br>
 The most important part is the Teensy 4.1, which is the brains of the cube. It runs at 600MHz and has support for DMA which allows the cube to get up to 300fps in some animations.<br>
+
 <img src="images/Motherboard.png" alt="Motherboard" height="300"/>
 
 ### Step 9: Putting it all together :star:
 
-If you have made it this far, congratulations:star2:! You are almost done. Now you just have to put everything together without breaking anything.<br>
+If you have made it this far, congratulations:star2:! You are almost done. Now you just have to put everything without breaking it.<br>
 
 Start by mounting all of the peripherals to the base frame.
 - 2x 5V 40A PSU
@@ -150,12 +157,22 @@ Start by mounting all of the peripherals to the base frame.
 - Back went cover
 - Back IO (optional and not recommended)
 
-<br><br><br><br>
-
 <img src="images/Last_assembly.jpg" alt="Frame" height="300"/>
 
+Plug in all wires and place the LED structure on top of the base frame. Upload a test pattern and watch your cube come to life.
+
+//video here
+
+### Step 10: Software :computer:
+
+The firmware is written in C++ and uses the FastLED library with the OctoWS2811 library to control the LEDs. The animations are stored in a separate file and are called by the main loop.<br>
+The touch screen is controlled by the TFT_eSPI library and the touch screen library. The touch screen is mainly used to select animations. The SNES controller is connected via the USB hub and is used to play TETRIS.<br>
+
+There is also a presentation mode, cycles through all of the animations.<br>
+
+If you want to add your own animations, you can do so by adding a new function to the animations file and calling it in the main loop.
 
 
+### Step 11: Enjoy you new RGB LED cube :tada:
 
-
-
+I hope you enjoyed building this cube as much as I did. I learned a lot and I am very happy with the result. I hope you are too. If you have any questions or suggestions, feel free to post an issue or contact me directly.
